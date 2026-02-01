@@ -4,7 +4,7 @@ use sqlx;
 
 use uuid::Uuid;
 
-async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sqlx::Error> { // creates user
+pub async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sqlx::Error> { // creates user
     let id = Uuid::new_v4();
     let simdi = chrono::Utc::now();
 
@@ -24,7 +24,7 @@ async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sqlx::
 
 }
 
-async fn find_by_id(pool: &sqlx::PgPool, id: uuid::Uuid) -> Result<User, sqlx::Error> {
+pub async fn find_by_id(pool: &sqlx::PgPool, id: uuid::Uuid) -> Result<User, sqlx::Error> {
     sqlx::query_as!(
         User,
         r#"
@@ -37,7 +37,7 @@ async fn find_by_id(pool: &sqlx::PgPool, id: uuid::Uuid) -> Result<User, sqlx::E
         .fetch_one(pool)
         .await
 }
-async fn get_all_users(pool: &sqlx::PgPool) -> Result<Vec<User>, sqlx::Error> {
+pub async fn get_all_users(pool: &sqlx::PgPool) -> Result<Vec<User>, sqlx::Error> {
     sqlx::query_as!(
         User,
         r#"

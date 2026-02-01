@@ -3,6 +3,7 @@ mod repo;
 mod domain;
 mod infra;
 mod app;
+mod api;
 
 use std::net::SocketAddr;
 
