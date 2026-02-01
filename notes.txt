@@ -1,0 +1,15 @@
+Bagimliliklar:
+HTTP Runtime:
+    axum: HTTP Server + routing
+    tokio: async runtime
+    tracing + tracing-subscriber: loglama
+Json/validation:
+    serde + serde_json
+DB:
+    sqlx : PostgreSQL pool + query
+tipler:
+    uuid: UUID uretimi ve parse
+    chrono: created_at/read_at icin
+Config ve hata:
+    dotenvy: .env yuklemek icin
+    thiserrror: AppError tanimlamak icin
