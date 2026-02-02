@@ -24,19 +24,6 @@ pub async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sq
 
 }
 
-pub async fn find_by_id(pool: &sqlx::PgPool, id: uuid::Uuid) -> Result<User, sqlx::Error> {
-    sqlx::query_as!(
-        User,
-        r#"
-        SELECT id, username, created_at
-        FROM users
-        WHERE id = $1
-        "#,
-        id
-    )
-        .fetch_one(pool)
-        .await
-}
 pub async fn get_all_users(pool: &sqlx::PgPool) -> Result<Vec<User>, sqlx::Error> {
     sqlx::query_as!(
         User,

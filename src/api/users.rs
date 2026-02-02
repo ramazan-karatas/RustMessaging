@@ -1,12 +1,11 @@
 use axum::{
-    extract::{State, Path, Json},
+    extract::{State, Json},
     http::StatusCode,
     response::IntoResponse
 };
 
 use crate::{app::AppState,
         repo::user_repo,
-        domain::user::User,
         infra::error::AppError,
 };
 
@@ -24,14 +23,6 @@ pub async fn create_user_handler(
     Ok((StatusCode::CREATED, Json(user)))
 }
 
-pub async fn get_user_handler(
-    State(state): State<AppState>,
-    Path(id): Path<uuid::Uuid>, // urldeki ID'yi id degiskenine aliyoruz.
-) -> Result<impl IntoResponse, AppError> {
-    let user = user_repo::find_by_id(&state.db, id).await?;
-
-    Ok(Json(user))
-}
 
 pub async fn list_users_handler (
     State(state): State<AppState>

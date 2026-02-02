@@ -1,6 +1,5 @@
 use std::env;
 use dotenvy::dotenv;
-use std::path::Path;
 use crate::infra::error::AppError;
 
 pub struct AppConfig {

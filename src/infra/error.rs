@@ -14,22 +14,11 @@ pub enum AppError{
     MissingEnv(String),
     #[error("DB Error")]
     Db(#[from] sqlx::Error),
-    #[error("Bad Request")]
-    BadRequest(String),
-    #[error("Not Found")]
-    NotFound(String),
-    #[error("Conflict")]
-    Conflict(String),
-    #[error("Internal Error")]
-    Internal(String),
 }
 
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let (status, message) = match self {
-            AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg),
-            AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg),
-            AppError::Conflict(msg) => (StatusCode::CONFLICT, msg),
 
             AppError::MissingEnv(var) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
@@ -39,10 +28,6 @@ impl IntoResponse for AppError {
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "database error".to_string(),
                 ),
-            AppError::Internal(msg) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                msg,
-                )
         };
 
         let body = Json(ErrorBody { error: message });
