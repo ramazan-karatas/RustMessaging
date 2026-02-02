@@ -68,7 +68,6 @@ http://127.0.0.1:8000
 | POST | /users | Yeni kullanıcı oluşturur |
 | GET | /users | Tüm kullanıcıları listeler |
 | GET | /users/{id} | Tekil kullanıcı getirir |
-| DELETE | /users/{id} | Kullanıcıyı siler |
 
 **Örnek JSON (Kullanıcı Oluşturma):**
 ```json
