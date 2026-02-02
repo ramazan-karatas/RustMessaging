@@ -1,5 +1,9 @@
 use uuid::Uuid;
 use chrono::{DateTime,Utc};
+use serde::{Serialize, Deserialize};
+use sqlx::FromRow;
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Message {
     pub id: Uuid,
     pub from_user_id: Uuid,
