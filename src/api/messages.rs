@@ -8,8 +8,8 @@ use uuid::Uuid;
 
 use crate::{
     app::AppState,
+    service::message_service,
     infra::error::AppError,
-    repo::message_repo,
 };
 
 
@@ -25,13 +25,11 @@ pub async fn send_message_handler(
     State(state): State<AppState>,
     Json(payload): Json<SendMessageRequest>,
 ) -> Result<impl IntoResponse, AppError> {
-    let message = message_repo::send_message(
-        &state.db,
-        payload.from_user_id,
-        payload.to_user_id,
-        &payload.content.as_str(),
-    ).await?;
-    Ok((StatusCode::CREATED, Json(message)))
+
+    // message_service'tan send_message_service() fonksiyonu cagiriliyor. Bu fonksiyon Result<Message, AppError> donuyor.
+    let message = message_service::send_message_service(&state.db, payload.from_user_id, payload.to_user_id, payload.content).await?;
+
+    Ok((StatusCode::CREATED, Json(message))) // Mesaj gondermenin ok olmasi durumunda StatusCode::CREATED ve Json(message) donduruluyor.
 }
 
 // Inbox Handler
@@ -40,7 +38,7 @@ pub async fn list_inbox_handler(
     State(state): State<AppState>,
     Path(user_id): Path<Uuid>
 ) -> Result<impl IntoResponse, AppError> {
-    let messages = message_repo::list_inbox(&state.db, user_id).await?;
+    let messages = message_service::list_inbox_service(&state.db, user_id).await?;
     Ok(Json(messages))
 }
 
@@ -51,6 +49,6 @@ pub async fn list_sent_handler(
     Path(user_id): Path<Uuid>
 ) -> Result<impl IntoResponse, AppError>
 {
-    let messages = message_repo::list_sent(&state.db, user_id).await?;
+    let messages = message_service::list_sent_service(&state.db, user_id).await?;
     Ok(Json(messages))
 }

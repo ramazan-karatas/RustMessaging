@@ -1,15 +1,12 @@
 use axum::{
-    extract::State,
     routing::{ post, get },
-    Json, Router,
+    Router,
 };
 
-use serde::Serialize;
 use sqlx::PgPool;
 
 use crate::{
-    api::{messages, users},
-    infra::error::AppError,
+    api::{messages, users, health},
 };
 
 #[derive(Clone)]
@@ -19,7 +16,7 @@ pub struct AppState {
 
 pub fn build_router(state: AppState) -> Router {
     Router::new()
-        .route("/health", get(health))
+        .route("/health", get(health::health)) // /health endpointine get istegi gonderildiginde get(health) calistirir.
 
         // POST /create-user -> yeni user olusturur.
         .route("/create-user", post(users::create_user_handler))
@@ -39,14 +36,4 @@ pub fn build_router(state: AppState) -> Router {
         .route("/users/{id}/sent", get(messages::list_sent_handler))
 
         .with_state(state)
-}
-
-#[derive(Serialize)]
-struct HealthResponse {
-    status: &'static str,
-}
-
-async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse>, AppError> {
-    sqlx::query("SELECT 1").execute(&state.db).await?;
-    Ok(Json(HealthResponse { status: "ok" }))
 }

@@ -5,10 +5,10 @@ use sqlx;
 use uuid::Uuid;
 
 pub async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sqlx::Error> { // creates user
-    let id = Uuid::new_v4();
-    let simdi = chrono::Utc::now();
+    let id = Uuid::new_v4(); // yeni id degeri olusturuyor.
+    let simdi = chrono::Utc::now(); // olusturma zamanini tutmak icin simdi degerini olusturuyoruz.
 
-    sqlx::query_as!(
+    sqlx::query_as!( // burada sql sorgusu gonderiliyor.
         User,
         r#"
         INSERT INTO users (id, username, created_at)
@@ -20,8 +20,7 @@ pub async fn create_user(pool: &sqlx::PgPool, username: &str) -> Result<User, sq
         simdi,
     )
         .fetch_one(pool)
-        .await
-
+        .await // islem basarili oldugunda User, basarisiz oldugunda sqlx::Error donduruluyor.
 }
 
 pub async fn get_all_users(pool: &sqlx::PgPool) -> Result<Vec<User>, sqlx::Error> {

@@ -14,6 +14,10 @@ pub enum AppError{
     MissingEnv(String),
     #[error("DB Error")]
     Db(#[from] sqlx::Error),
+    #[error("Validation")]
+    Validation(String),
+    #[error("Message Error")]
+    EmptyMessage(String)
 }
 
 impl IntoResponse for AppError {
@@ -28,6 +32,14 @@ impl IntoResponse for AppError {
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "database error".to_string(),
                 ),
+            AppError::Validation(var) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("validation error {}", var),
+                ),
+            AppError::EmptyMessage(var) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("message error {}", var),
+                )
         };
 
         let body = Json(ErrorBody { error: message });

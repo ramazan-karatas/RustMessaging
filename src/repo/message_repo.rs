@@ -2,11 +2,11 @@ use sqlx::PgPool;
 use uuid::Uuid;
 use crate::domain::message::Message;
 
-pub async fn send_message(pool: &PgPool, from_user_id: Uuid, to_user_id: Uuid, content: &str)
+pub async fn send_message(pool: &PgPool, from_user_id: Uuid, to_user_id: Uuid, content: &str) // mesaji veritabanina yazan fonksiyon.
     -> Result<Message, sqlx::Error>
 {
-    let id = Uuid::new_v4();
-    let now = chrono::Utc::now();
+    let id = Uuid::new_v4(); // mesaja ait bir id olusturuluyor.
+    let now = chrono::Utc::now(); // mesajin gonderilme zamanini tutmak icin now degeri olusturuluyor.
     sqlx::query_as!(
         Message,
         r#"
